@@ -1,0 +1,8 @@
+flask
+flask-mysqldb
+flask-SQLAlchemy
+Flask-Migrate
+Flask-Script
+passlib[bcrypt]
+flask-admin
+flask_babelex
