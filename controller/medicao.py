@@ -28,3 +28,5 @@ class MedicaoController():
                 'result': medicoes,
                 'status': status
             }
+
+  

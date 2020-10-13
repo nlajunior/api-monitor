@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import desc, asc
+from sqlalchemy import desc, asc, func
 from config import app_config, app_active
 
 config = app_config[app_active]
@@ -26,4 +26,18 @@ class Medicao(db.Model):
             print(e)
         finally:
             db.session.close()
-            return res    
+            return res 
+
+    def get_medicoes_toquen(self):
+
+        try:
+            if limit is None:
+                res = db.session.query(Medicao).group_by(Medicao.toquen).all()
+            else:
+                res = db.session.query(Medicao).group_by(Medicao.toquen).limit(limit).all()
+        except Exception as e:
+            res = []
+            print(e)
+        finally:
+            db.session.close()
+            return res 

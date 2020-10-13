@@ -6,3 +6,6 @@ Flask-Script
 passlib[bcrypt]
 flask-admin
 flask_babelex
+pyjwt
+flask_login
+Flask-Bootstrap

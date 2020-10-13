@@ -1,11 +1,33 @@
 # -*- coding: utf-8 -*-
 from flask_admin.contrib.sqla import ModelView
-from flask_admin import BaseView, expose
+from model.user import User
+from flask_admin import AdminIndexView, expose
 from config import app_config, app_active
+
+from flask_login import current_user
+from flask import redirect
 
 config = app_config[app_active]
 
+class HomeView(AdminIndexView):
+  extra_css = [config.URL_MAIN + 'static/css/home.css','https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css']
 
+  @expose('/')
+  def index(self):
+
+    user_model = User()
+    users = user_model.get_total_users()
+
+    return self.render('home_admin.html', report={'users': 0 if not users else users[0]})
+
+  def is_accessible(self):
+    return current_user.is_authenticated
+
+  def inaccessible_callback(self, name, **kwargs):
+    if current_user.is_authenticated:
+      return redirect('/admin')
+    else:
+      return redirect('/login')
 
 class UserView(ModelView):
 
@@ -47,3 +69,39 @@ class UserView(ModelView):
         User.set_password(form.password.data)
     else:
         del form.password
+  
+  def is_accessible(self):
+    if current_user.is_authenticated:
+      role = current_user.role
+    
+    if role == 1:
+      self.can_create = True
+      self.can_edit = True
+      self.can_delete = True
+      return current_user.is_authenticated
+
+  def inaccessible_callback(self, name, **kwargs):
+    if current_user.is_authenticated:
+      return redirect('/admin')
+    else:
+      return redirect('/login')
+
+class RoleView(ModelView):
+  column_labels = {
+    'name':'Nome',
+  }
+  def is_accessible(self):
+    if current_user.is_authenticated:
+      role = current_user.role
+      if role == 1:
+        self.can_create = True
+        self.can_edit = True
+        self.can_delete = True
+        return current_user.is_authenticated
+
+  def inaccessible_callback(self, name, **kwargs):
+    if current_user.is_authenticated:
+      return redirect('/admin')
+    else:
+      return redirect('/login')
+  
