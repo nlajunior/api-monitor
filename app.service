@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve app
+After=network.target
+
+[Service]
+User=nljunior
+Group=www-data
+WorkingDirectory=/home/nljunior/app
+Environment="PATH=/home/nljunior/app/venv/bin"
+ExecStart=/home/nljunior/app/venv/bin/gunicorn --workers 3 --bind 0.0.0.0:8080 wsgi:app
+
+[Install]
+WantedBy=multi-user.target

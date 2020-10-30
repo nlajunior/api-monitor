@@ -7,7 +7,7 @@ class Config(object):
     TEMPLATE_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     APP = None
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://pythonuser:M&1r&1903D@localhost:3306/dbmonitor'
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:123456789@localhost:3306/dbmonitor'
     SENDGRID_API_KEY = 'API_KEY'
 
 class DevelopmentConfig(Config):
@@ -20,15 +20,15 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     TESTING = True
     DEBUG = True
-    IP_HOST = 'localhost' # Aqui geralmente é um IP de um servidor na nuvem e não o endereço da máquina local
-    PORT_HOST = 8000
+    IP_HOST = '0.0.0.0' # Aqui geralmente é um IP de um servidor na nuvem e não o endereço da máquina local
+    PORT_HOST = 8080
     URL_MAIN = 'http://%s:%s/' % (IP_HOST, PORT_HOST)
 
 class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
     IP_HOST = 'localhost' # Aqui geralmente é um IP de um servidor na nuvem e não o endereço da máquina local
-    PORT_HOST = 8080
+    PORT_HOST = 80
     URL_MAIN = 'http://%s:%s/' % (IP_HOST, PORT_HOST)
 
 app_config = {
@@ -37,4 +37,4 @@ app_config = {
     'production': ProductionConfig()
 }
 
-app_active = 'development'
+app_active = 'testing'
