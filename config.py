@@ -37,4 +37,5 @@ app_config = {
     'production': ProductionConfig()
 }
 
-app_active = 'testing'
+#app_active = os.getenv('FLASK_ENV')
+app_active= 'testing'

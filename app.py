@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, request, redirect, render_template, Response, json, session, abort
+from flask import Flask, request, redirect, render_template, Response, json, session, abort, jsonify
 from flask_bootstrap import Bootstrap
 from flask_babelex import Babel
 
@@ -53,13 +53,14 @@ def create_app(config_name):
         def verify_token(*args, **kwargs):
             user = UserController()
             try:
-                result = user.verify_auth_token(request.headers['access_token'])
+                result = user.verify_auth_token(request.headers.get('token'))
                 if result['status'] == 200:
                     return f(*args, **kwargs)
                 else:
                     abort(result['status'], result['message'])
             except KeyError as e:
                 abort(401, 'Você precisa enviar um token de acesso')
+
         return verify_token
 
     @babel.localeselector
@@ -69,13 +70,8 @@ def create_app(config_name):
         if override:
             session['lang']=override
         return session.get('lang', 'pt_BR')
-
-    
+   
     @app.route('/')
-    def index():
-        return 'Hello World!'
-
-    @app.route('/login/')
     def login():
         return render_template('login.html', data={'status': 200, 'msg': None, 'type': None})
 
@@ -95,22 +91,15 @@ def create_app(config_name):
                 return redirect('/admin')
         else:
             return render_template('login.html', data={'status': 401, 'msg': 'Dados de usuário incorretos', 'type': 1})
-
-   
     
-  
-
-   
-
     @app.route('/user/<user_id>', methods=['GET'])
-    
     def get_user_profile(user_id):
         header = {}
         user = UserController()
         response = user.get_user_by_id(user_id=user_id)
         return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json'), response[
             'status'], header
-    #parei aqui
+    
     @app.route('/login_api/', methods=['POST'])
     def login_api():
         header = {}
@@ -125,34 +114,33 @@ def create_app(config_name):
             if result.active:
                 result = {
                     'id': result.id,
-                    'username': result.username,
-                    'email': result.email,
-                    'date_created': result.date_created,
-                    'active': result.active
+                    'username': result.username
                 }
+
                 header = {
-                    "access_token": user.generate_auth_token(result),
+                    "token": user.generate_auth_token(result),
                     "token_type": "JWT"
                 }
                 code = 200
                 response["message"] = "Login realizado com sucesso"
                 response["result"] = result
 
-        return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json'), code, header
+        #return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json'), code, header
+        return jsonify({'menssage':response.get('message')})
 
     @app.route('/medicoes/', methods=['GET'])
     @app.route('/medicoes/<limit>', methods=['GET'])
-
     @auth_token_required
     def get_medicoes(limit=None):
         header = {
-            'access_token': request.headers['access_token'],
+            'token': request.headers['token'],
             "token_type": "JWT"
         }
+
         medicao = MedicaoController()
         response = medicao.get_medicoes(limit=limit)
-        return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json'), response[
-            'status'], header
+        
+        return jsonify({'result': response.get('result'), 'status':response.get('result'), 'token': header.get('token')}), header
 
     @app.route('/logout')
     def logout_send():

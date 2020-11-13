@@ -51,10 +51,10 @@ class UserController():
     response = self.user_model.get_user_by_id()
     return response
  
-  def verify_auth_token(self, access_token):
+  def verify_auth_token(self, token):
         status = 401    
         try:
-            jwt.decode(access_token, config.SECRET, algorithm='HS256')
+            jwt.decode(token, config.SECRET, algorithm='HS256')
             message = 'Token válido'
             status = 200
         except jwt.ExpiredSignatureError:
@@ -78,5 +78,5 @@ class UserController():
             'username': data['username'],
             "exp": date_time
         }
-        access_token = jwt.encode(dict_jwt, config.SECRET, algorithm='HS256')
-        return access_token
+        token = jwt.encode(dict_jwt, config.SECRET, algorithm='HS256')
+        return token

@@ -9,3 +9,4 @@ flask_babelex
 pyjwt
 flask_login
 Flask-Bootstrap
+gunicorn
