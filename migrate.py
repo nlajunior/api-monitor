@@ -33,7 +33,7 @@ class User(db.Model):
 
 class Medicao(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  token = db.Column(db.String(400), unique=True, nullable=False)
+  token = db.Column(db.String(400), unique=False, nullable=False)
   fhr_value = db.Column(db.Integer, nullable=False)
   duration = db.Column(db.Integer, nullable=False)   
   date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)

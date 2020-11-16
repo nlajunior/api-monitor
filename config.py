@@ -1,13 +1,16 @@
 import os
-import random, string
+import random, string, json
+
+with open('/home/nljunior/app/config.json') as config_file:
+    config = json.load(config_file)
 
 class Config(object):
     CSRF_ENABLED = True
-    SECRET = 'ysb_92=qe#dgjf8%0ng+a*#4rt#5%3*4kw5%i2bck*gn@w3@f&-&'
+    SECRET = config.get('SECRET')
+    SQLALCHEMY_DATABASE_URI = config.get('SQLALCHEMY_DATABASE_URI')
     TEMPLATE_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     APP = None
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:123456789@localhost:3306/dbmonitor'
     SENDGRID_API_KEY = 'API_KEY'
 
 class DevelopmentConfig(Config):
@@ -21,7 +24,7 @@ class TestingConfig(Config):
     TESTING = True
     DEBUG = True
     IP_HOST = '0.0.0.0' # Aqui geralmente é um IP de um servidor na nuvem e não o endereço da máquina local
-    PORT_HOST = 8080
+    PORT_HOST = 8000
     URL_MAIN = 'http://%s:%s/' % (IP_HOST, PORT_HOST)
 
 class ProductionConfig(Config):
@@ -37,5 +40,4 @@ app_config = {
     'production': ProductionConfig()
 }
 
-#app_active = os.getenv('FLASK_ENV')
-app_active= 'testing'
+app_active= config.get('FLASK_ENV')

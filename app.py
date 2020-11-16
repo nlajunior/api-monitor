@@ -92,23 +92,23 @@ def create_app(config_name):
         else:
             return render_template('login.html', data={'status': 401, 'msg': 'Dados de usuário incorretos', 'type': 1})
     
-    @app.route('/user/<user_id>', methods=['GET'])
-    def get_user_profile(user_id):
-        header = {}
-        user = UserController()
-        response = user.get_user_by_id(user_id=user_id)
-        return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json'), response[
-            'status'], header
-    
+    @app.route('/logout')
+    def logout_send():
+        logout_user()
+        return render_template('login.html', data={'status': 200, 'msg': 'Usuário deslogado com sucesso!', 'type':3})   
+
+    #================================================ API ===================================================================== 
     @app.route('/login_api/', methods=['POST'])
     def login_api():
         header = {}
+
         user = UserController()
         email = request.json['email']
         password = request.json['password']
         result = user.login(email, password)
+        
         code = 401
-        response = {"message": "Usuário não autorizado", "result":[]}
+        response = {"message": "Usuário não autorizado"}
 
         if result:
             if result.active:
@@ -123,10 +123,13 @@ def create_app(config_name):
                 }
                 code = 200
                 response["message"] = "Login realizado com sucesso"
-                response["result"] = result
+               
 
         #return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json'), code, header
-        return jsonify({'menssage':response.get('message')})
+        return jsonify ({
+            'result':response.get('message')
+
+        }), code, header
 
     @app.route('/medicoes/', methods=['GET'])
     @app.route('/medicoes/<limit>', methods=['GET'])
@@ -136,16 +139,29 @@ def create_app(config_name):
             'token': request.headers['token'],
             "token_type": "JWT"
         }
-
         medicao = MedicaoController()
         response = medicao.get_medicoes(limit=limit)
         
-        return jsonify({'result': response.get('result'), 'status':response.get('result'), 'token': header.get('token')}), header
+        return jsonify({'result': response.get('result'), 'status':response.get('status')}), header
 
-    @app.route('/logout')
-    def logout_send():
-        logout_user()
-        return render_template('login.html', data={'status': 200, 'msg': 'Usuário deslogado com sucesso!', 'type':3})
+    @app.route('/medicoes/token/', methods=['GET'])
+    def get_medicoes_por_token(limit=None):
+        header = {
+            'token': request.headers['token'],
+            "token_type": "JWT"
+        }
+        medicao = MedicaoController()
+        response = medicao.get_medicoes_token(limit=limit)
+        
+        return jsonify({'result': response.get('result'), 'status':response.get('status')}), header
+    
+    @app.route('/user/<user_id>', methods=['GET'])
+    def get_user_profile(user_id):
+        header = {}
+        user = UserController()
+        response = user.get_user_by_id(user_id=user_id)
+       
+        return jsonify({'result': response.get('result')}), header
     
     @login_manager.user_loader
     def load_user(user_id):
