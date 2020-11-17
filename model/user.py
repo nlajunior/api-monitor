@@ -63,32 +63,7 @@ class User(db.Model, UserMixin):
             print("Erro ao listar usuários.")
             return []  
 
-    def save(self):
-        try:
-            db.session.add(self)
-            db.session.commit()
-            return True
-        except Exception as e:
-            db.session.rollback()
-            return False
-
-    def update(self, obj):
-        try:
-            res = db.session.query(User).filter(User.id == self.id).update(obj)
-            db.session.commit()
-            return True
-        except Exception as e:
-            print(e)
-            db.session.rollback()
-            return False
-
-    def delete(self):
-        try:
-            User.query.filter(User.id==self.id).delete()
-            return True
-        except Exception as e:
-            return False
-
+   
     def set_password(self, password):
         self.password = pbkdf2_sha256.hash(password)
 

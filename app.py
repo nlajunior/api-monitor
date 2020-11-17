@@ -124,8 +124,6 @@ def create_app(config_name):
                 code = 200
                 response["message"] = "Login realizado com sucesso"
                
-
-        #return Response(json.dumps(response, ensure_ascii=False), mimetype='application/json'), code, header
         return jsonify ({
             'result':response.get('message')
 
@@ -153,6 +151,18 @@ def create_app(config_name):
         medicao = MedicaoController()
         response = medicao.get_medicoes_token(limit=limit)
         
+        return jsonify({'result': response.get('result'), 'status':response.get('status')}), header
+
+    @app.route('/medicoes/data/<date_created>', methods=['GET'])
+    def get_medicoes_date_created(date_created):
+        header = {
+            'token': request.headers['token'],
+            "token_type": "JWT"
+        }
+        medicao = MedicaoController()
+        response = medicao.get_medicoes_date_created(date_created)
+        
+                
         return jsonify({'result': response.get('result'), 'status':response.get('status')}), header
     
     @app.route('/user/<user_id>', methods=['GET'])

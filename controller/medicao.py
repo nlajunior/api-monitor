@@ -52,5 +52,29 @@ class MedicaoController():
                 'status': status
             }
         
+    def get_medicoes_date_created(self, date_created):
+        medicoes = []
+        try:
+            self.medicao_model.date_created=date_created
+            
+            res = self.medicao_model.get_medicoes_date()
 
+            for registro in res:
+                medicoes.append({
+                    'id': registro.id,
+                    'token': registro.token,
+                    'fhr_value': registro.fhr_value,
+                    'duration': registro.duration,
+                    'date_created ': registro.date_created
+                })
+            status = 200
+        except Exception as e:
+            print(e)
+            medicoes = []
+            status = 400
+        finally:
+            return {
+                'result': medicoes,
+                'status': status
+            }
   
