@@ -122,7 +122,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'nlajunior','nlajunior@gmail.com','$pbkdf2-sha256$29000$ZozRem9NyXkPwZiTUiolBA$lbpeZZN.b6y8SspAGdTEt5p6iprWi44uf/.vwmncB8w','2020-10-11 08:57:00',NULL,NULL,1,1),(2,'userapi','userapi@sfiec.org.br','$pbkdf2-sha256$29000$BUCotZZy7r33fm8NAWCs1Q$aMhaxOgkCoJuBcs2X0hGnMvVIEfcYAjZ8/wKWPMrn/Y','2020-10-30 08:11:00',NULL,NULL,1,1);
+INSERT INTO `user` VALUES (1,'nlajunior','nlajunior@gmail.com','$pbkdf2-sha256$29000$ZozRem9NyXkPwZiTUiolBA$lbpeZZN.b6y8SspAGdTEt5p6iprWi44uf/.vwmncB8w','2020-10-11 08:57:00',NULL,NULL,1,1,'ysb_92=qe#dgjf8%0ng+a*#4rt#5%3*4kw5%i2bck*gn@w3@f&-&a'),(2,'userapi','userapi@yourapi.org.br','$pbkdf2-sha256$29000$BUCotZZy7r33fm8NAWCs1Q$aMhaxOgkCoJuBcs2X0hGnMvVIEfcYAjZ8/wKWPMrn/Y','2020-10-30 08:11:00',NULL,NULL,1,1,'ysb_92=qe#dgjf8%0ng+a*#4rt#5%3*4kw5%i2bck*gn@w3@f&-&');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -97,12 +97,13 @@ def create_app(config_name):
         logout_user()
         return render_template('login.html', data={'status': 200, 'msg': 'Usuário deslogado com sucesso!', 'type':3})   
 
-    #================================================ API ===================================================================== 
+    #================================================ API ======================================================================================= 
     @app.route('/login_api/', methods=['POST'])
     def login_api():
         header = {}
 
         user = UserController()
+        
         email = request.json['email']
         password = request.json['password']
         result = user.login(email, password)
@@ -114,7 +115,9 @@ def create_app(config_name):
             if result.active:
                 result = {
                     'id': result.id,
-                    'username': result.username
+                    'username': result.username,
+                    'key_auth' : result.key_auth
+                 
                 }
 
                 header = {
@@ -122,11 +125,12 @@ def create_app(config_name):
                     "token_type": "JWT"
                 }
                 code = 200
-                response["message"] = "Login realizado com sucesso"
+                response["message"] = "success"
+                response["key_auth"] = result['key_auth']
                
         return jsonify ({
-            'result':response.get('message')
-
+            'organizationkey':response.get('key_auth'),
+            'message': response.get('message')
         }), code, header
 
     @app.route('/medicoes/', methods=['GET'])

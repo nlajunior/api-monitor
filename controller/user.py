@@ -32,7 +32,8 @@ class UserController():
                 'id': res.id,
                 'name': res.username,
                 'email': res.email,
-                'date_created': res.date_created
+                'date_created': res.date_created,
+                'key_auth':res.key_auth
             }
 
             status = 200

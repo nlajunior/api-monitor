@@ -1,6 +1,6 @@
 {
     "SECRET" : "ysb_92=qe#dgjf8%0ng+a*#4rt#5%3*4kw5%i2bck*gn@w3@f&-&",
-    "SQLALCHEMY_DATABASE_URI": "mysql+mysqldb://user_api:tautomeria@localhost:3306/dbmonitor",
+    "SQLALCHEMY_DATABASE_URI": "mysql+mysqldb://admindba:123456789@localhost:3306/dbmonitor",
     "FLASK_ENV":"testing"
     
 }

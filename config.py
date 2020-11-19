@@ -1,7 +1,7 @@
 import os
 import random, string, json
 
-with open('/home/nljunior/app/config.json') as config_file:
+with open('/home/nljunior/projetos/api-monitor/config.json') as config_file:
     config = json.load(config_file)
 
 class Config(object):
