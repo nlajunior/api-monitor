@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from model.medicao import Medicao
 
 
@@ -65,7 +67,7 @@ class MedicaoController():
                     'token': registro.token,
                     'fhr_value': registro.fhr_value,
                     'duration': registro.duration,
-                    'date_created ': registro.date_created
+                    'date_created': registro.date_created
                 })
             status = 200
         except Exception as e:
@@ -77,4 +79,11 @@ class MedicaoController():
                 'result': medicoes,
                 'status': status
             }
-  
+    
+    def save_medicao(self, obj):
+        self.medicao_model.token = obj['token']
+        self.medicao_model.fhr_value = obj['fhr_value']
+        self.medicao_model.duration = obj['duration']
+        self.medicao_model.date_created = datetime.now()
+
+        return self.medicao_model.save_medicao()  

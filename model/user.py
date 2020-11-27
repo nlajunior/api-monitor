@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(40), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    key_auth = db.Column(db.String(200), nullable=False)
+    organizationkey = db.Column(db.String(200), nullable=False)
     date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
     last_update = db.Column(db.DateTime(6), onupdate=db.func.current_timestamp(), nullable=True)
     recovery_code = db.Column(db.String(200), nullable=True)
@@ -30,6 +30,15 @@ class User(db.Model, UserMixin):
     def get_user_by_email(self):
         try:
             res = db.session.query(User).filter(User.email==self.email).first()
+        except Exception as e:
+            res = None
+            print(e)
+        finally:
+            db.session.close()
+            return res
+    def get_user_by_organizationkey(self):
+        try:
+            res = db.session.query(User).filter(User.organizationkey==self.organizationkey).first()
         except Exception as e:
             res = None
             print(e)

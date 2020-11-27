@@ -22,6 +22,18 @@ class UserController():
           else:
               return {}
       return {}
+
+  def auth_api(self, organizationkey, password):
+    self.user_model.organizationkey = organizationkey
+    result =  self.user_model.get_user_by_organizationkey()
+
+    if result is not None:
+        res = self.user_model.verify_password(password, result.password)
+        if res:
+            return result
+        else:
+            return {}
+        return {}
   
   def get_user_by_id(self, user_id):    
         result = {}
@@ -33,7 +45,7 @@ class UserController():
                 'name': res.username,
                 'email': res.email,
                 'date_created': res.date_created,
-                'key_auth':res.key_auth
+                'organizationkey':res.organizationkey
             }
 
             status = 200

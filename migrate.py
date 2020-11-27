@@ -20,16 +20,24 @@ class Role(db.Model):
   name=db.Column(db.String(40),unique=True, nullable=False)
 
 class User(db.Model):
-  id=db.Column(db.Integer,primary_key=True)
-  username=db.Column(db.String(40),unique=True,nullable=False)
-  email=db.Column(db.String(120),unique=True,nullable=False)
-  password=db.Column(db.String(200),nullable=False)
-  date_created=db.Column(db.DateTime(6),default=db.func.current_timestamp(),nullable=False)
-  last_update=db.Column(db.DateTime(6),onupdate=db.func.current_timestamp(),nullable=True)
-  recovery_code=db.Column(db.String(200),nullable=True)
-  active=db.Column(db.Boolean(),default=1,nullable=True)
+  id = db.Column(db.Integer, primary_key=True)
+  username = db.Column(db.String(40), unique=True, nullable=False)
+  email = db.Column(db.String(120), unique=True, nullable=False)
+  password = db.Column(db.String(200), nullable=False)
+  organizationkey = db.Column(db.String(200), nullable=False)
+  date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
+  last_update = db.Column(db.DateTime(6), onupdate=db.func.current_timestamp(), nullable=True)
+  recovery_code = db.Column(db.String(200), nullable=True)
+  active = db.Column(db.Boolean(), default=1, nullable=True)
+  role = db.Column(db.Integer, db.ForeignKey(Role.id), nullable=False)
 
-  role=db.Column(db.Integer,db.ForeignKey(Role.id),nullable=False)
+class Device(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  mac = db.Column(db.String(400), unique=False, nullable=False)
+  date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
+  status = db.Column(db.String(50), nullable=False)
+  userid = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
+  active = db.Column(db.Boolean(), default=1, nullable=True)
 
 class Medicao(db.Model):
   id = db.Column(db.Integer, primary_key=True)
@@ -39,6 +47,14 @@ class Medicao(db.Model):
   date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
   active = db.Column(db.Boolean(), default=1, nullable=True)
 
+class Test(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    duration = db.Column(db.Integer, nullable=False) 
+    fhr_value = db.Column(db.Integer, nullable=False) 
+    date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
+    token = db.Column(db.String(200), unique=False, nullable=False)
+    device_id = db.Column(db.Integer, nullable=False) 
+    active = db.Column(db.Boolean(), default=1, nullable=True)
 
 if __name__ == '__main__':
   manager.run()

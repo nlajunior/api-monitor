@@ -9,6 +9,7 @@ from admin.Admin import start_views
 
 from controller.user import UserController
 from controller.medicao import MedicaoController
+from controller.device import DeviceController
 
 from functools import wraps
 from flask_login import LoginManager, login_user, logout_user
@@ -98,26 +99,25 @@ def create_app(config_name):
         return render_template('login.html', data={'status': 200, 'msg': 'Usuário deslogado com sucesso!', 'type':3})   
 
     #================================================ API ======================================================================================= 
-    @app.route('/login_api/', methods=['POST'])
+    @app.route('/organizations/', methods=['POST'])
     def login_api():
         header = {}
 
         user = UserController()
         
-        email = request.json['email']
+        organizationkey = request.json['organizationkey']
         password = request.json['password']
-        result = user.login(email, password)
+        result = user.auth_api(organizationkey, password)
         
         code = 401
-        response = {"message": "Usuário não autorizado"}
-
+        response = {"success": "false"}
+        
         if result:
             if result.active:
                 result = {
                     'id': result.id,
                     'username': result.username,
-                    'key_auth' : result.key_auth
-                 
+                    'organizationkey' : result.organizationkey                
                 }
 
                 header = {
@@ -125,12 +125,15 @@ def create_app(config_name):
                     "token_type": "JWT"
                 }
                 code = 200
-                response["message"] = "success"
-                response["key_auth"] = result['key_auth']
-               
+                response["success"] = "true"
+                response["devices"]= get_devices_online()
+                              
         return jsonify ({
-            'organizationkey':response.get('key_auth'),
-            'message': response.get('message')
+            
+            'success': response.get('success'),
+            'devices': response.get('devices')
+
+            
         }), code, header
 
     @app.route('/medicoes/', methods=['GET'])
@@ -168,6 +171,25 @@ def create_app(config_name):
         
                 
         return jsonify({'result': response.get('result'), 'status':response.get('status')}), header
+    
+    #@app.route('/devices/', methods=['GET'])
+    def get_devices_online():
+        
+        device = DeviceController()
+        #response = device.get_devices_online()
+
+        #return jsonify({'result': response.get('result')})
+        return device.get_devices_online()
+        
+    @app.route('/medicao/', methods=['POST'])
+    def save_medicao():
+        medicao = MedicaoController()
+        result= medicao.save_medicao(request.json)
+        if result:
+            message = 'Inserido'
+        else:
+            message = 'Falha'
+        return message
     
     @app.route('/user/<user_id>', methods=['GET'])
     def get_user_profile(user_id):
