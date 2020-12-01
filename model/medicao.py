@@ -28,7 +28,7 @@ class Medicao(db.Model):
             db.session.close()
             return res 
 
-    def get_medicoes_token(self, limit=None):
+    def get_for_token(self, limit=None):
         try:
             if limit is None:
                 res = db.session.query(Medicao).group_by(Medicao.session_id).all()
@@ -41,9 +41,11 @@ class Medicao(db.Model):
             db.session.close()
             return res
    
-    def get_medicoes_date(self):
+    def get_for_date_created(self):
         try:
-           res = db.session.query(Medicao).filter(Medicao.date_created==self.date_created).all()
+              
+           res = db.session.query(Medicao).filter(Medicao.date_created==str(self.date_created)).all()
+           print(res)
         except Exception as e:
             res =[]
             print(e)
@@ -51,7 +53,7 @@ class Medicao(db.Model):
             db.session.close()
             return res
     
-    def save_medicao(self):
+    def save_test(self):
         try:
             db.session.add(self)
             db.session.commit()

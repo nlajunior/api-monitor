@@ -139,37 +139,37 @@ def create_app(config_name):
     @app.route('/tests/', methods=['GET'])
     @app.route('/tests/<limit>', methods=['GET'])
     @auth_token_required
-    def get_medicoes(limit=None):
+    def get_all_tests(limit=None):
         header = {
             'token': request.headers['token'],
             "token_type": "JWT"
         }
         medicao = MedicaoController()
-        response = medicao.get_medicoes(limit=limit)
+        response = medicao.get_tests(limit=limit)
         
         return jsonify({'result': response.get('result'), 'status':response.get('status')}), header
 
     @app.route('/tests/token/', methods=['GET'])
-    def get_medicoes_por_token(limit=None):
+    @auth_token_required
+    def get_tests_token(limit=None):
         header = {
             'token': request.headers['token'],
             "token_type": "JWT"
         }
         medicao = MedicaoController()
-        response = medicao.get_medicoes_token(limit=limit)
+        response = medicao.get_tests_token(limit=limit)
         
         return jsonify({'result': response.get('result'), 'status':response.get('status')}), header
 
-    @app.route('/tests/data/<date_created>', methods=['GET'])
-    def get_medicoes_date_created(date_created):
+    @app.route('/tests/data/<string:date_created>', methods=['GET'])
+    def get_test_date_created(date_created):
         header = {
             'token': request.headers['token'],
             "token_type": "JWT"
         }
         medicao = MedicaoController()
-        response = medicao.get_medicoes_date_created(date_created)
-        
-                
+        response = medicao.get_tests_date_created(date_created)
+             
         return jsonify({'result': response.get('result'), 'status':response.get('status')}), header
     
     #@app.route('/devices/', methods=['GET'])
@@ -182,9 +182,9 @@ def create_app(config_name):
         return device.get_devices_online()
         
     @app.route('/test/', methods=['POST'])
-    def save_medicao():
+    def save_test():
         medicao = MedicaoController()
-        result= medicao.save_medicao(request.json)
+        result= medicao.save_test(request.json)
             
         if result:
             status = '200'
@@ -192,8 +192,7 @@ def create_app(config_name):
         else:
             status = '401'
         return status
-    
-  
+     
     @login_manager.user_loader
     def load_user(user_id):
         user = UserController()
