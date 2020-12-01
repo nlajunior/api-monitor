@@ -2,7 +2,6 @@ from datetime import datetime
 
 from model.medicao import Medicao
 
-
 class MedicaoController():
 
     def __init__(self):
@@ -15,7 +14,7 @@ class MedicaoController():
             for registro in res:
                 medicoes.append({
                     'id': registro.id,
-                    'token': registro.token,
+                    'session_id': registro.session_id,
                     'fhr_value': registro.fhr_value,
                     'duration': registro.duration,
                     'date_created ': registro.date_created
@@ -38,7 +37,7 @@ class MedicaoController():
             for registro in res:
                 medicoes.append({
                     'id': registro.id,
-                    'token': registro.token,
+                    'session_id': registro.session_id,
                     'fhr_value': registro.fhr_value,
                     'duration': registro.duration,
                     'date_created ': registro.date_created
@@ -64,7 +63,7 @@ class MedicaoController():
             for registro in res:
                 medicoes.append({
                     'id': registro.id,
-                    'token': registro.token,
+                    'session_id': registro.session_id,
                     'fhr_value': registro.fhr_value,
                     'duration': registro.duration,
                     'date_created': registro.date_created
@@ -81,7 +80,7 @@ class MedicaoController():
             }
     
     def save_medicao(self, obj):
-        self.medicao_model.token = obj['token']
+        self.medicao_model.session_id = obj['session_id']
         self.medicao_model.fhr_value = obj['fhr_value']
         self.medicao_model.duration = obj['duration']
         self.medicao_model.date_created = datetime.now()

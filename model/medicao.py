@@ -9,7 +9,7 @@ db = SQLAlchemy(config.APP)
 
 class Medicao(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    token = db.Column(db.String(400), unique=False, nullable=False)
+    session_id = db.Column(db.String(400), unique=False, nullable=False)
     fhr_value = db.Column(db.Integer, nullable=False)
     duration = db.Column(db.Integer, nullable=False)   
     date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
@@ -31,9 +31,9 @@ class Medicao(db.Model):
     def get_medicoes_token(self, limit=None):
         try:
             if limit is None:
-                res = db.session.query(Medicao).group_by(Medicao.toquen).all()
+                res = db.session.query(Medicao).group_by(Medicao.session_id).all()
             else:
-                res = db.session.query(Medicao).group_by(Medicao.toquen).limit(limit).all()
+                res = db.session.query(Medicao).group_by(Medicao.session_id).limit(limit).all()
         except Exception as e:
             res = []
             print(e)
@@ -50,5 +50,15 @@ class Medicao(db.Model):
         finally:
             db.session.close()
             return res
+    
+    def save_medicao(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+            return True
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            return False
 
             

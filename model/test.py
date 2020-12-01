@@ -12,7 +12,7 @@ class Test(db.Model):
     duration = db.Column(db.Integer, nullable=False) 
     fhr_value = db.Column(db.Integer, nullable=False) 
     date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
-    token = db.Column(db.String(200), unique=False, nullable=False)
+    session_id = db.Column(db.String(200), unique=False, nullable=False)
     device_id = db.Column(db.String(100), nullable=True)
     active = db.Column(db.Boolean(), default=1, nullable=True)
 
@@ -32,9 +32,9 @@ class Test(db.Model):
     def get_tests_token(self, limit=None):
         try:
             if limit is None:
-                res = db.session.query(Test).group_by(Test.token).all()
+                res = db.session.query(Test).group_by(Test.session_id).all()
             else:
-                res = db.session.query(Test).group_by(Test.token).limit(limit).all()
+                res = db.session.query(Test).group_by(Test.session_id).limit(limit).all()
         except Exception as e:
             res = []
             print(e)

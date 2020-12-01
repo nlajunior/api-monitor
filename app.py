@@ -58,7 +58,7 @@ def create_app(config_name):
                 if result['status'] == 200:
                     return f(*args, **kwargs)
                 else:
-                    abort(result['status'], result['message'])
+                    abort(result['status'], result['status'])
             except KeyError as e:
                 abort(401, 'Você precisa enviar um token de acesso')
 
@@ -136,8 +136,8 @@ def create_app(config_name):
             
         }), code, header
 
-    @app.route('/medicoes/', methods=['GET'])
-    @app.route('/medicoes/<limit>', methods=['GET'])
+    @app.route('/tests/', methods=['GET'])
+    @app.route('/tests/<limit>', methods=['GET'])
     @auth_token_required
     def get_medicoes(limit=None):
         header = {
@@ -149,7 +149,7 @@ def create_app(config_name):
         
         return jsonify({'result': response.get('result'), 'status':response.get('status')}), header
 
-    @app.route('/medicoes/token/', methods=['GET'])
+    @app.route('/tests/token/', methods=['GET'])
     def get_medicoes_por_token(limit=None):
         header = {
             'token': request.headers['token'],
@@ -160,7 +160,7 @@ def create_app(config_name):
         
         return jsonify({'result': response.get('result'), 'status':response.get('status')}), header
 
-    @app.route('/medicoes/data/<date_created>', methods=['GET'])
+    @app.route('/tests/data/<date_created>', methods=['GET'])
     def get_medicoes_date_created(date_created):
         header = {
             'token': request.headers['token'],
@@ -181,24 +181,19 @@ def create_app(config_name):
         #return jsonify({'result': response.get('result')})
         return device.get_devices_online()
         
-    @app.route('/medicao/', methods=['POST'])
+    @app.route('/test/', methods=['POST'])
     def save_medicao():
         medicao = MedicaoController()
         result= medicao.save_medicao(request.json)
+            
         if result:
-            message = 'Inserido'
+            status = '200'
+            
         else:
-            message = 'Falha'
-        return message
+            status = '401'
+        return status
     
-    @app.route('/user/<user_id>', methods=['GET'])
-    def get_user_profile(user_id):
-        header = {}
-        user = UserController()
-        response = user.get_user_by_id(user_id=user_id)
-       
-        return jsonify({'result': response.get('result')}), header
-    
+  
     @login_manager.user_loader
     def load_user(user_id):
         user = UserController()
