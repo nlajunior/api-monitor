@@ -2,6 +2,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc, asc, func
 from config import app_config, app_active
+from datetime import date
 
 config = app_config[app_active]
 
@@ -18,9 +19,10 @@ class Medicao(db.Model):
     def get_all(self, limit=None):
         try:
             if limit is None:
-                res = db.session.query(Medicao).order_by(desc(Medicao.date_created)).all()
+                res = db.session.query(Medicao).order_by(desc(Medicao.id)).filter(Medicao.date_created==str(date.today())).all()
             else:
-                res = db.session.query(Medicao).order_by(desc(Medicao.date_created)).limit(limit).all()
+                res = db.session.query(Medicao).order_by(desc(Medicao.id)).filter(Medicao.date_created==str(date.today())).limit(limit).all()
+             
         except Exception as e:
             res = []
             print(e)
@@ -43,9 +45,7 @@ class Medicao(db.Model):
    
     def get_for_date_created(self):
         try:
-              
-           res = db.session.query(Medicao).filter(Medicao.date_created==str(self.date_created)).all()
-           print(res)
+            res = db.session.query(Medicao).filter(Medicao.date_created==str(self.date_created)).all()
         except Exception as e:
             res =[]
             print(e)

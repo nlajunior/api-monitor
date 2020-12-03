@@ -18,7 +18,7 @@ class MedicaoController():
                     'session_id': registro.session_id,
                     'fhr_value': registro.fhr_value,
                     'duration': registro.duration,
-                    'date_created ': registro.date_created
+                    'date_created': registro.date_created.strftime('%d/%m/%Y') 
                 })
             status = 200
         except Exception as e:
@@ -41,7 +41,7 @@ class MedicaoController():
                     'session_id': registro.session_id,
                     'fhr_value': registro.fhr_value,
                     'duration': registro.duration,
-                    'date_created ': registro.date_created
+                    'date_created': registro.date_created.strftime('%d/%m/%Y') 
                 })
             status = 200
         except Exception as e:
@@ -54,11 +54,10 @@ class MedicaoController():
                 'status': status
             }
         
-    def get_tests_date_created(self, date_created):
+    def get_tests_date_created(self, date_created=date.today()):
         medicoes = []
         try:
             self.medicao_model.date_created = date_created
-            
             res = self.medicao_model.get_for_date_created()
 
             for registro in res:
@@ -67,7 +66,7 @@ class MedicaoController():
                     'session_id': registro.session_id,
                     'fhr_value': registro.fhr_value,
                     'duration': registro.duration,
-                    'date_created': registro.date_created
+                    'date_created': registro.date_created.strftime('%d/%m/%Y') 
                 })
             status = 200
         except Exception as e:

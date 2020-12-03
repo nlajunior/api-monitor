@@ -101,10 +101,9 @@ def create_app(config_name):
     #================================================ API ======================================================================================= 
     @app.route('/organizations/', methods=['POST'])
     def login_api():
-        header = {}
 
+        header = {}
         user = UserController()
-        
         organizationkey = request.json['organizationkey']
         password = request.json['password']
         result = user.auth_api(organizationkey, password)
@@ -167,6 +166,7 @@ def create_app(config_name):
             'token': request.headers['token'],
             "token_type": "JWT"
         }
+                   
         medicao = MedicaoController()
         response = medicao.get_tests_date_created(date_created)
              
