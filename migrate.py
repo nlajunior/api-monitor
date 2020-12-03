@@ -42,7 +42,7 @@ class Device(db.Model):
 class Medicao(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   session_id = db.Column(db.String(400), unique=False, nullable=False)
-  fhr_value = db.Column(db.Integer, nullable=False)
+  fhr_value = db.Column(db.Float, nullable=False)
   duration = db.Column(db.Integer, nullable=False)   
   date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
   active = db.Column(db.Boolean(), default=1, nullable=True)
@@ -50,7 +50,7 @@ class Medicao(db.Model):
 class Test(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     duration = db.Column(db.Integer, nullable=False) 
-    fhr_value = db.Column(db.Integer, nullable=False) 
+    fhr_value = db.Column(db.Float, nullable=False)
     date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
     session_id = db.Column(db.String(200), unique=False, nullable=False)
     device_id = db.Column(db.Integer, nullable=False) 
