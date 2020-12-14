@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc, asc, func
+from sqlalchemy import and_
 from config import app_config, app_active
 from datetime import date
 
@@ -13,6 +14,7 @@ class Medicao(db.Model):
     session_id = db.Column(db.String(400), unique=False, nullable=False)
     fhr_value = db.Column(db.Float, nullable=False)
     duration = db.Column(db.Integer, nullable=False)   
+    device_id = db.Column(db.Integer, nullable=True)
     date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
     active = db.Column(db.Boolean(), default=1, nullable=True)
 
@@ -30,12 +32,16 @@ class Medicao(db.Model):
             db.session.close()
             return res 
 
-    def get_for_token(self, limit=None):
+    def get_for_session_id(self, limit=None):
         try:
             if limit is None:
-                res = db.session.query(Medicao).group_by(Medicao.session_id).all()
+                
+                #res = db.session.query(Medicao).filter(Medicao.session_id==self.session_id).all()
+                res = db.session.query(Medicao).filter(and_(Medicao.session_id == self.session_id, Medicao.date_created == self.date_created)).all()
             else:
-                res = db.session.query(Medicao).group_by(Medicao.session_id).limit(limit).all()
+                
+                res = db.session.query(Medicao).filter(Medicao.session_id==self.session_id).limit(limit).all()
+                #res = db.session.query(Medicao).filter(and_(Medicao.session_id == self.session_id, Medicao.date_created == self.date_created)).all()
         except Exception as e:
             res = []
             print(e)

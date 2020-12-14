@@ -80,7 +80,7 @@ class UserController():
             'status': status
         }
     
-  def generate_auth_token(self, data, exp=60, time_exp=False):
+  def generate_auth_token(self, data, exp=480, time_exp=False):
         if time_exp == True:
             date_time = data['exp']
         else:

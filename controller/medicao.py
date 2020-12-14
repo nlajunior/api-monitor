@@ -18,7 +18,8 @@ class MedicaoController():
                     'session_id': registro.session_id,
                     'fhr_value': registro.fhr_value,
                     'duration': registro.duration,
-                    'date_created': registro.date_created.strftime('%d/%m/%Y') 
+                    'date_created': registro.date_created.strftime('%d/%m/%Y'),
+                    'device_id': registro.device_id 
                 })
             status = 200
         except Exception as e:
@@ -31,17 +32,22 @@ class MedicaoController():
                 'status': status
             }
 
-    def get_tests_token(self, limit):
+    def get_tests_session_id(self, session_id, date_created, limit):
         medicoes = []
         try:
-            res = self.medicao_model.get_for_token(limit=limit)
+            print(session_id)
+            self.medicao_model.session_id = session_id
+            self.medicao_model.date_created=date_created
+
+            res = self.medicao_model.get_for_session_id(limit=limit)
             for registro in res:
                 medicoes.append({
                     'id': registro.id,
                     'session_id': registro.session_id,
                     'fhr_value': registro.fhr_value,
                     'duration': registro.duration,
-                    'date_created': registro.date_created.strftime('%d/%m/%Y') 
+                    'date_created': registro.date_created.strftime('%d/%m/%Y'),
+                    'device_id': registro.device_id 
                 })
             status = 200
         except Exception as e:
@@ -66,7 +72,8 @@ class MedicaoController():
                     'session_id': registro.session_id,
                     'fhr_value': registro.fhr_value,
                     'duration': registro.duration,
-                    'date_created': registro.date_created.strftime('%d/%m/%Y') 
+                    'date_created': registro.date_created.strftime('%d/%m/%Y'), 
+                    'device_id': registro.device_id 
                 })
             status = 200
         except Exception as e:
@@ -83,6 +90,7 @@ class MedicaoController():
         self.medicao_model.session_id = obj['session_id']
         self.medicao_model.fhr_value = obj['fhr_value']
         self.medicao_model.duration = obj['duration']
+        self.medicao_model.device_id = obj['device_id']
         self.medicao_model.date_created = date.today()
 
         return self.medicao_model.save_test()  

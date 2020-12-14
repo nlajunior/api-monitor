@@ -13,7 +13,7 @@ class Test(db.Model):
     fhr_value = db.Column(db.Integer, nullable=False) 
     date_created = db.Column(db.DateTime(6), default=db.func.current_timestamp(), nullable=False)
     session_id = db.Column(db.String(200), unique=False, nullable=False)
-    device_id = db.Column(db.String(100), nullable=True)
+    device_id = db.Column(db.Integer, nullable=True)
     active = db.Column(db.Boolean(), default=1, nullable=True)
 
     def get_all(self, limit=None):

@@ -148,15 +148,15 @@ def create_app(config_name):
         
         return jsonify({'result': response.get('result'), 'status':response.get('status')}), header
 
-    @app.route('/tests/token/', methods=['GET'])
+    @app.route('/tests/session_id/<string:session_id>/<date_created>', methods=['GET'])
     @auth_token_required
-    def get_tests_token(limit=None):
+    def get_tests_session_id(session_id, date_created, limit=None):
         header = {
             'token': request.headers['token'],
             "token_type": "JWT"
         }
         medicao = MedicaoController()
-        response = medicao.get_tests_token(limit=limit)
+        response = medicao.get_tests_session_id(session_id, date_created, limit=limit)
         
         return jsonify({'result': response.get('result'), 'status':response.get('status')}), header
 
